@@ -84,6 +84,29 @@
   .stations span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; font-size: 11px; }
 
   .error-note { text-align: center; color: var(--red); font-size: 13px; margin: 20px 0; display: none; }
+
+  .history { margin-top: 10px; }
+  .history h2 {
+    font-size: 15px; font-weight: 700; margin: 0 0 14px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .history-empty { color: var(--text-faint); font-size: 13px; }
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 16px; font-size: 13px; flex-wrap: wrap;
+  }
+  .history-row .h-date { color: var(--text); font-weight: 700; min-width: 110px; }
+  .history-row .h-bar {
+    flex: 1 1 160px; min-width: 120px; height: 8px; border-radius: 5px; overflow: hidden;
+    display: flex; background: var(--red-dim);
+  }
+  .history-row .h-bar .h-good { background: var(--green); height: 100%; }
+  .history-row .h-stats { color: var(--text-dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .history-row .h-stats b.good { color: var(--green); }
+  .history-row .h-stats b.bad { color: var(--amber); }
+  .history-row .h-total { color: var(--text-faint); font-size: 11.5px; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -127,6 +150,11 @@
 
   <div class="error-note" id="errorNote">Couldn't load live data right now — the page will keep retrying.</div>
 
+  <div class="history">
+    <h2>Daily history</h2>
+    <div id="historyList"></div>
+  </div>
+
   <footer>
     Live data via the public <a href="https://huxley2.azurewebsites.net" target="_blank" rel="noopener">Huxley2</a> wrapper around
     National Rail's real-time Darwin departure boards. A scheduled job polls a set of major SWR hub stations every 10 minutes and
@@ -141,6 +169,7 @@
   "use strict";
 
   var STATE_URL = "data/state.json";
+  var HISTORY_URL = "data/history.json";
   var REFRESH_MS = 30000;
   var MAX_BLOCKS = 300;
 
@@ -224,8 +253,42 @@
       });
   }
 
+  function fmtHistoryDate(dateStr) {
+    var d = new Date(dateStr + "T12:00:00Z");
+    return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+  }
+
+  function renderHistory(days) {
+    var list = document.getElementById("historyList");
+    if (!days || !days.length) {
+      list.innerHTML = '<p class="history-empty">No completed days yet — the first entry appears here after midnight (UK time) once today\'s tally is final.</p>';
+      return;
+    }
+    var html = '<div class="history-list">';
+    days.forEach(function (d) {
+      html +=
+        '<div class="history-row">' +
+        '<span class="h-date">' + fmtHistoryDate(d.date) + '</span>' +
+        '<span class="h-bar"><span class="h-good" style="width:' + d.pctOnTime + '%"></span></span>' +
+        '<span class="h-stats"><b class="good">' + d.pctOnTime + '% on time</b> &nbsp;·&nbsp; <b class="bad">' + d.pctDisrupted + '% delayed/cancelled</b></span>' +
+        '<span class="h-total">' + d.total + ' services</span>' +
+        '</div>';
+    });
+    html += "</div>";
+    list.innerHTML = html;
+  }
+
+  function loadHistory() {
+    fetch(HISTORY_URL + "?t=" + Date.now())
+      .then(function (res) { return res.ok ? res.json() : []; })
+      .then(renderHistory)
+      .catch(function () { renderHistory([]); });
+  }
+
   loadState();
   setInterval(loadState, REFRESH_MS);
+  loadHistory();
+  setInterval(loadHistory, REFRESH_MS);
   updateCountdown();
   setInterval(updateCountdown, 1000);
 })();

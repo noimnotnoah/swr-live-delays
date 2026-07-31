@@ -20,6 +20,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 STATE_PATH = Path(__file__).resolve().parent.parent / "data" / "state.json"
+HISTORY_PATH = Path(__file__).resolve().parent.parent / "data" / "history.json"
 UK_TZ = ZoneInfo("Europe/London")
 HUXLEY_BASE = "https://huxley2.azurewebsites.net"
 NUM_ROWS = 50
@@ -82,12 +83,46 @@ def fresh_state(today):
     }
 
 
+def archive_day(old_state):
+    """Append the final tally of a finished day to the ever-growing history log."""
+    total = old_state["onTime"] + old_state["delayed"] + old_state["cancelled"]
+    if total == 0:
+        return
+
+    history = []
+    if HISTORY_PATH.exists():
+        with open(HISTORY_PATH) as f:
+            history = json.load(f)
+
+    disrupted = old_state["delayed"] + old_state["cancelled"]
+    entry = {
+        "date": old_state["date"],
+        "onTime": old_state["onTime"],
+        "delayed": old_state["delayed"],
+        "cancelled": old_state["cancelled"],
+        "total": total,
+        "pctOnTime": round((old_state["onTime"] / total) * 100),
+        "pctDisrupted": round((disrupted / total) * 100),
+    }
+
+    history = [h for h in history if h["date"] != entry["date"]]
+    history.append(entry)
+
+    HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(HISTORY_PATH, "w") as f:
+        json.dump(history, f, indent=2)
+
+    print(f"Archived {entry['date']}: {entry['pctOnTime']}% on time, {entry['pctDisrupted']}% delayed/cancelled ({total} services).")
+
+
 def main():
     now_uk = datetime.now(UK_TZ)
     today = now_uk.strftime("%Y-%m-%d")
 
     state = load_state()
     if state is None or state.get("date") != today:
+        if state is not None:
+            archive_day(state)
         print(f"New day ({today}) -- resetting tally.")
         state = fresh_state(today)
 
