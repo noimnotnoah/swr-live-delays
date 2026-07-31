@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "date": "2026-07-31",
+    "onTime": 756,
+    "delayed": 71,
+    "cancelled": 8,
+    "total": 835,
+    "pctOnTime": 91,
+    "pctDisrupted": 9
+  }
+]
