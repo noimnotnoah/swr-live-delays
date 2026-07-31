@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>South Western Railway — Live Status</title>
+<meta name="description" content="Live daily tally of South Western Railway trains running on time, delayed, or cancelled, from real National Rail data. Resets at midnight.">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0a0c10;
+    --panel: #12151c;
+    --panel-2: #181c25;
+    --line: #262c38;
+    --text: #eef1f6;
+    --text-dim: #9aa5b5;
+    --text-faint: #5d6576;
+    --green: #4dd68c;
+    --green-dim: #1c3a2c;
+    --amber: #f0b23a;
+    --amber-dim: #3d301a;
+    --red: #ff6b6b;
+    --red-dim: #3a1f21;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    padding: 32px 16px 60px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 8px; }
+  h1 { font-size: clamp(22px, 4vw, 30px); font-weight: 800; margin: 0 0 8px; letter-spacing: -.01em; }
+  .subhead { color: var(--text-dim); font-size: 14px; max-width: 640px; margin: 0 auto; line-height: 1.5; }
+
+  .meta-row {
+    display: flex; justify-content: center; gap: 22px; flex-wrap: wrap;
+    margin: 22px 0 34px; font-size: 12.5px; color: var(--text-faint);
+  }
+  .meta-row b { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 6px; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  .panels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
+  @media (max-width: 760px) { .panels { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .panel .p-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .panel .p-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .panel .p-pct { font-size: 12.5px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .panel .p-count { font-size: 42px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; margin-bottom: 14px; }
+  .panel.ontime .p-label, .panel.ontime .p-count { color: var(--green); }
+  .panel.delayed .p-label, .panel.delayed .p-count { color: var(--amber); }
+  .panel.cancelled .p-label, .panel.cancelled .p-count { color: var(--red); }
+
+  .stack {
+    display: flex; flex-wrap: wrap; gap: 3px; align-content: flex-start;
+    max-height: 96px; overflow: hidden;
+  }
+  .stack .block { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .panel.ontime .stack .block { background: var(--green); }
+  .panel.delayed .stack .block { background: var(--amber); }
+  .panel.cancelled .stack .block { background: var(--red); }
+  .stack-overflow { font-size: 11px; color: var(--text-faint); margin-top: 8px; }
+
+  .total-bar {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 18px 22px; display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 40px; flex-wrap: wrap; gap: 10px;
+  }
+  .total-bar .t-label { font-size: 13px; color: var(--text-dim); }
+  .total-bar .t-value { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 24px; font-size: 12.5px; color: var(--text-faint); line-height: 1.7;
+  }
+  footer a { color: var(--text-dim); }
+  .stations { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .stations span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; font-size: 11px; }
+
+  .error-note { text-align: center; color: var(--red); font-size: 13px; margin: 20px 0; display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>South Western Railway — Live Status</h1>
+    <p class="subhead">A running daily tally of real SWR train services, built from live National Rail departure data. Every train is counted once, the moment it first appears as on time, delayed, or cancelled. Resets at midnight (UK time).</p>
+  </header>
+
+  <div class="meta-row">
+    <span><span class="live-dot"></span>Last updated <b id="lastUpdated">—</b></span>
+    <span>Resets in <b id="countdown">—</b></span>
+    <span>Tracking since <b id="trackingDate">—</b></span>
+  </div>
+
+  <div class="panels">
+    <div class="panel ontime">
+      <div class="p-top"><span class="p-label">On time</span><span class="p-pct" id="onTimePct">—</span></div>
+      <div class="p-count" id="onTimeCount">0</div>
+      <div class="stack" id="onTimeStack"></div>
+      <div class="stack-overflow" id="onTimeOverflow"></div>
+    </div>
+    <div class="panel delayed">
+      <div class="p-top"><span class="p-label">Delayed</span><span class="p-pct" id="delayedPct">—</span></div>
+      <div class="p-count" id="delayedCount">0</div>
+      <div class="stack" id="delayedStack"></div>
+      <div class="stack-overflow" id="delayedOverflow"></div>
+    </div>
+    <div class="panel cancelled">
+      <div class="p-top"><span class="p-label">Cancelled</span><span class="p-pct" id="cancelledPct">—</span></div>
+      <div class="p-count" id="cancelledCount">0</div>
+      <div class="stack" id="cancelledStack"></div>
+      <div class="stack-overflow" id="cancelledOverflow"></div>
+    </div>
+  </div>
+
+  <div class="total-bar">
+    <span class="t-label">Total SWR services tracked today</span>
+    <span class="t-value" id="totalCount">0</span>
+  </div>
+
+  <div class="error-note" id="errorNote">Couldn't load live data right now — the page will keep retrying.</div>
+
+  <footer>
+    Live data via the public <a href="https://huxley2.azurewebsites.net" target="_blank" rel="noopener">Huxley2</a> wrapper around
+    National Rail's real-time Darwin departure boards. A scheduled job polls a set of major SWR hub stations every 10 minutes and
+    counts each unique train service once — this reflects services passing through those stations, not a literal count of
+    every train on the entire network (no public API exposes that directly).
+    <div class="stations" id="stationList"></div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STATE_URL = "data/state.json";
+  var REFRESH_MS = 30000;
+  var MAX_BLOCKS = 300;
+
+  var STATION_NAMES = {
+    WAT: "London Waterloo", CLJ: "Clapham Junction", WOK: "Woking", BSK: "Basingstoke",
+    SOU: "Southampton Central", PMS: "Portsmouth Harbour", RDG: "Reading",
+    GLD: "Guildford", WEY: "Weymouth", EXD: "Exeter St Davids",
+  };
+
+  function fmtPct(part, total) {
+    if (!total) return "0%";
+    return Math.round((part / total) * 100) + "%";
+  }
+
+  function renderStack(containerId, overflowId, count) {
+    var container = document.getElementById(containerId);
+    var overflow = document.getElementById(overflowId);
+    var shown = Math.min(count, MAX_BLOCKS);
+    var html = "";
+    for (var i = 0; i < shown; i++) html += '<span class="block"></span>';
+    container.innerHTML = html;
+    overflow.textContent = count > MAX_BLOCKS ? "+" + (count - MAX_BLOCKS) + " more" : "";
+  }
+
+  function render(state) {
+    var total = state.onTime + state.delayed + state.cancelled;
+
+    document.getElementById("onTimeCount").textContent = state.onTime;
+    document.getElementById("delayedCount").textContent = state.delayed;
+    document.getElementById("cancelledCount").textContent = state.cancelled;
+    document.getElementById("totalCount").textContent = total;
+
+    document.getElementById("onTimePct").textContent = fmtPct(state.onTime, total);
+    document.getElementById("delayedPct").textContent = fmtPct(state.delayed, total);
+    document.getElementById("cancelledPct").textContent = fmtPct(state.cancelled, total);
+
+    renderStack("onTimeStack", "onTimeOverflow", state.onTime);
+    renderStack("delayedStack", "delayedOverflow", state.delayed);
+    renderStack("cancelledStack", "cancelledOverflow", state.cancelled);
+
+    document.getElementById("trackingDate").textContent = state.date;
+
+    if (state.lastUpdated) {
+      var d = new Date(state.lastUpdated);
+      document.getElementById("lastUpdated").textContent = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" });
+    }
+
+    if (state.stationsMonitored) {
+      document.getElementById("stationList").innerHTML = state.stationsMonitored
+        .map(function (crs) { return "<span>" + (STATION_NAMES[crs] || crs) + "</span>"; })
+        .join("");
+    }
+  }
+
+  function updateCountdown() {
+    var now = new Date();
+    var ukNowStr = now.toLocaleString("en-US", { timeZone: "Europe/London" });
+    var ukNow = new Date(ukNowStr);
+    var nextMidnight = new Date(ukNow);
+    nextMidnight.setHours(24, 0, 0, 0);
+    var diffMs = nextMidnight - ukNow;
+    var h = Math.floor(diffMs / 3600000);
+    var m = Math.floor((diffMs % 3600000) / 60000);
+    var s = Math.floor((diffMs % 60000) / 1000);
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    document.getElementById("countdown").textContent = pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+
+  function loadState() {
+    fetch(STATE_URL + "?t=" + Date.now())
+      .then(function (res) {
+        if (!res.ok) throw new Error("bad response");
+        return res.json();
+      })
+      .then(function (state) {
+        document.getElementById("errorNote").style.display = "none";
+        render(state);
+      })
+      .catch(function () {
+        document.getElementById("errorNote").style.display = "block";
+      });
+  }
+
+  loadState();
+  setInterval(loadState, REFRESH_MS);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
+</script>
+</body>
+</html>

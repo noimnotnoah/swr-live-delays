@@ -1,0 +1,35 @@
+name: Poll SWR live status
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: poll-swr
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run poller
+        run: python3 scripts/poll.py
+
+      - name: Commit updated state
+        run: |
+          git config user.name "SWR Live Poller"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/state.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update SWR status tally [skip ci]"
+            git push
+          fi
