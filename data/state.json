@@ -1,6 +1,6 @@
 {
   "date": "2026-08-09",
-  "onTime": 1922,
+  "onTime": 1927,
   "delayed": 72,
   "cancelled": 19,
   "seenServiceIds": [
@@ -549,6 +549,7 @@
     "793213WATRLMN_",
     "793213WOKING__",
     "793219BSNGSTK_",
+    "793219CLPHMJM_",
     "793219SOTON___",
     "793219WEYMTH__",
     "793219WOKING__",
@@ -2008,17 +2009,21 @@
     "809880CLPHMJM_",
     "809880WATRLMN_",
     "809880WOKING__",
+    "810153CLPHMJM_",
     "810683BSNGSTK_",
+    "810683CLPHMJM_",
     "810683WATRLMN_",
     "810683WOKING__",
+    "810771CLPHMJM_",
     "810771WATRLMN_",
     "810775CLPHMJW_",
     "810775WATRLMN_",
+    "810776CLPHMJW_",
     "810776WATRLMN_",
     "810813CLPHMJM_",
     "810813WATRLMN_"
   ],
-  "lastUpdated": "2026-08-09T23:17:13.823640+01:00",
+  "lastUpdated": "2026-08-09T23:52:13.620380+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
