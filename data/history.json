@@ -106,5 +106,14 @@
     "total": 1397,
     "pctOnTime": 97,
     "pctDisrupted": 3
+  },
+  {
+    "date": "2026-08-12",
+    "onTime": 493,
+    "delayed": 13,
+    "cancelled": 8,
+    "total": 514,
+    "pctOnTime": 96,
+    "pctDisrupted": 4
   }
 ]
