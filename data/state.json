@@ -1,10 +1,13 @@
 {
   "date": "2026-08-16",
-  "onTime": 0,
+  "onTime": 2,
   "delayed": 0,
   "cancelled": 0,
-  "seenServiceIds": [],
-  "lastUpdated": "2026-08-16T03:49:51.901431+01:00",
+  "seenServiceIds": [
+    "7779156CLPHMJW_",
+    "7779156WATRLMN_"
+  ],
+  "lastUpdated": "2026-08-16T04:34:37.974646+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
