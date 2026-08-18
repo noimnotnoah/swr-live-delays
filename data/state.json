@@ -1,10 +1,17 @@
 {
   "date": "2026-08-18",
-  "onTime": 0,
+  "onTime": 6,
   "delayed": 0,
   "cancelled": 0,
-  "seenServiceIds": [],
-  "lastUpdated": "2026-08-18T01:30:19.006668+01:00",
+  "seenServiceIds": [
+    "7839616SOTON___",
+    "7839734GUILDFD_",
+    "7840234BSNGSTK_",
+    "7840469PSEA____",
+    "7840475PSEA____",
+    "7840646PSEA____"
+  ],
+  "lastUpdated": "2026-08-18T03:02:32.880925+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
