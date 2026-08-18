@@ -1,6 +1,6 @@
 {
   "date": "2026-08-18",
-  "onTime": 1018,
+  "onTime": 1024,
   "delayed": 52,
   "cancelled": 4,
   "seenServiceIds": [
@@ -97,6 +97,7 @@
     "7839305GUILDFD_",
     "7839306GUILDFD_",
     "7839307GUILDFD_",
+    "7839307PSEA____",
     "7839307WATRLMN_",
     "7839308GUILDFD_",
     "7839376BSNGSTK_",
@@ -497,6 +498,9 @@
     "7839709WATRLMN_",
     "7839711WATRLMN_",
     "7839713WATRLMN_",
+    "7839714RDNG4AB_",
+    "7839716RDNG4AB_",
+    "7839718RDNG4AB_",
     "7839732CLPHMJM_",
     "7839732WATRLMN_",
     "7839733CLPHMJM_",
@@ -546,6 +550,7 @@
     "7839793PSEA____",
     "7839803PSEA____",
     "7839805PSEA____",
+    "7839807PSEA____",
     "7839811PSEA____",
     "7839811SOTON___",
     "7839813CLPHMJM_",
@@ -1031,6 +1036,7 @@
     "7840646PSEA____",
     "7840647PSEA____",
     "7840649PSEA____",
+    "7840650PSEA____",
     "7840652CLPHMJW_",
     "7840654CLPHMJW_",
     "7840657WATRLMN_",
@@ -1079,7 +1085,7 @@
     "7840774WATRLMN_",
     "7840774WOKING__"
   ],
-  "lastUpdated": "2026-08-18T18:43:38.723796+01:00",
+  "lastUpdated": "2026-08-18T19:02:24.719832+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
