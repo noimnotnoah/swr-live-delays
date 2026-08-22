@@ -1,10 +1,14 @@
 {
   "date": "2026-08-22",
-  "onTime": 0,
+  "onTime": 3,
   "delayed": 0,
   "cancelled": 0,
-  "seenServiceIds": [],
-  "lastUpdated": "2026-08-22T01:30:01.695873+01:00",
+  "seenServiceIds": [
+    "7977822WOKING__",
+    "7978223BSNGSTK_",
+    "7978473PSEA____"
+  ],
+  "lastUpdated": "2026-08-22T02:57:32.109321+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
