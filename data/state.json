@@ -1,6 +1,6 @@
 {
   "date": "2026-08-22",
-  "onTime": 469,
+  "onTime": 471,
   "delayed": 43,
   "cancelled": 10,
   "seenServiceIds": [
@@ -141,6 +141,7 @@
     "7977534GUILDFD_",
     "7977534PSEA____",
     "7977535GUILDFD_",
+    "7977536GUILDFD_",
     "7977537WOKING__",
     "7977539BSNGSTK_",
     "7977539WATRLMN_",
@@ -464,6 +465,7 @@
     "7978503GUILDFD_",
     "7978504GUILDFD_",
     "7978504PSEA____",
+    "7978505GUILDFD_",
     "7978506GUILDFD_",
     "7978506PSEA____",
     "7978507PSEA____",
@@ -527,7 +529,7 @@
     "7978736PSEA____",
     "7984935EXETRSD_"
   ],
-  "lastUpdated": "2026-08-22T22:09:41.981949+01:00",
+  "lastUpdated": "2026-08-22T22:32:51.385869+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
