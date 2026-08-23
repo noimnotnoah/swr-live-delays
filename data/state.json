@@ -1,6 +1,6 @@
 {
   "date": "2026-08-23",
-  "onTime": 38,
+  "onTime": 39,
   "delayed": 28,
   "cancelled": 0,
   "seenServiceIds": [
@@ -69,9 +69,10 @@
     "7992245CLPHMJW_",
     "7992245WATRLMN_",
     "7992246CLPHMJW_",
+    "8004994WATRLMN_",
     "8008682SOTON___"
   ],
-  "lastUpdated": "2026-08-23T03:11:09.533613+01:00",
+  "lastUpdated": "2026-08-23T04:15:26.289429+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
