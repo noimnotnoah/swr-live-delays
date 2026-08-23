@@ -1,6 +1,6 @@
 {
   "date": "2026-08-23",
-  "onTime": 39,
+  "onTime": 49,
   "delayed": 28,
   "cancelled": 0,
   "seenServiceIds": [
@@ -69,10 +69,20 @@
     "7992245CLPHMJW_",
     "7992245WATRLMN_",
     "7992246CLPHMJW_",
+    "8004108SOTON___",
+    "8004603PSEA____",
+    "8004637WOKING__",
+    "8004639GUILDFD_",
+    "8004769WATRLMN_",
+    "8004994CLPHMJW_",
     "8004994WATRLMN_",
+    "8005014PSEA____",
+    "8005090CLPHMJW_",
+    "8005090WATRLMN_",
+    "8005135WATRLMN_",
     "8008682SOTON___"
   ],
-  "lastUpdated": "2026-08-23T04:15:26.289429+01:00",
+  "lastUpdated": "2026-08-23T05:01:48.816957+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
