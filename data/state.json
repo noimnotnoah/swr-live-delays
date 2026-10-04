@@ -1,23 +1,10 @@
 {
-  "date": "2026-10-03",
-  "onTime": 12,
+  "date": "2026-10-04",
+  "onTime": 0,
   "delayed": 0,
   "cancelled": 0,
-  "seenServiceIds": [
-    "9323128SOTON___",
-    "9323150GUILDFD_",
-    "9331119CLPHMJM_",
-    "9331119WATRLMN_",
-    "9333158WOKING__",
-    "9349350CLPHMJW_",
-    "9349350WATRLMN_",
-    "9351795BSNGSTK_",
-    "9353806CLPHMJW_",
-    "9353806WATRLMN_",
-    "9355248CLPHMJW_",
-    "9355248WATRLMN_"
-  ],
-  "lastUpdated": "2026-10-03T23:29:17.034213+01:00",
+  "seenServiceIds": [],
+  "lastUpdated": "2026-10-04T02:49:08.640851+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
