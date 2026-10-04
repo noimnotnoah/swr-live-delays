@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-04",
+  "date": "2026-10-05",
   "onTime": 0,
   "delayed": 0,
   "cancelled": 0,
   "seenServiceIds": [],
-  "lastUpdated": "2026-10-04T21:28:11.428328+01:00",
+  "lastUpdated": "2026-10-05T00:25:42.229584+01:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
