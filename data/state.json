@@ -1,17 +1,10 @@
 {
-  "date": "2026-10-31",
-  "onTime": 4,
-  "delayed": 2,
+  "date": "2026-11-01",
+  "onTime": 0,
+  "delayed": 0,
   "cancelled": 0,
-  "seenServiceIds": [
-    "10219676SOTON___",
-    "10237371CLPHMJM_",
-    "10237371WATRLMN_",
-    "10237371WOKING__",
-    "10237373WOKING__",
-    "10237379CLPHMJM_"
-  ],
-  "lastUpdated": "2026-10-31T23:42:17.020441+00:00",
+  "seenServiceIds": [],
+  "lastUpdated": "2026-11-01T02:36:04.684586+00:00",
   "stationsMonitored": [
     "WAT",
     "CLJ",
